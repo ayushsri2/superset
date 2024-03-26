@@ -23,4 +23,5 @@ runs:
         npm pack
         npm install -g ./supersetbot*.tgz
     - name: supersetbot version
+      shell: bash
       run: supersetbot version
