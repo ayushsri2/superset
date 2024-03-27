@@ -271,7 +271,12 @@ class Github {
       let deps = parsedData.project.dependencies;
       if (group) {
         console.log(`Processing group: ${group}`);
-        deps = parsedData.project['optional-dependencies'][group];
+        const optDeps = parsedData.project['optional-dependencies'];
+        if (group === 'all') {
+          deps = Object.keys(optDeps).flatMap((k) => optDeps[k]);
+        } else {
+          deps = optDeps[group];
+        }
       }
       if (shuffle) {
         deps = shuffleArray(deps);
