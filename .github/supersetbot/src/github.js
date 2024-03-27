@@ -347,6 +347,32 @@ class Github {
     return result;
   }
 
+  async fixReqsFile(filePath) {
+    // Somehow pip-compile-multi generates replaces the '-e file:.' with a hard-coded local path
+    // hoping they fix it in the future. In the meantime we can fix it here.
+    try {
+      // Read the file
+      const content = await fs.promises.readFile(filePath, { encoding: 'utf-8' });
+
+      let needsUpdate = false;
+      // Process each line
+      const updatedLines = content.split('\n').map(line => {
+        if (line.startsWith('-e file:') && !line.startsWith('-e file:.')) {
+          needsUpdate = true;
+          return '-e file:.';
+        }
+        return line;
+      });
+
+      // Join the lines back and write to the file
+      if (needsUpdate) {
+        await fs.promises.writeFile(filePath, updatedLines.join('\n'), { encoding: 'utf-8' });
+      }
+    } catch (error) {
+      console.error('Error updating the file:', error);
+    }
+  }
+
   async createBumpLibPullRequest({
     pythonPackage, verbose = false, dryRun = false, useCurrentRepo = false,
   }) {
@@ -372,6 +398,8 @@ class Github {
 
     // Run pip-compile-multi
     await runShellCommand({ command: `pip-compile-multi --use-cache -P ${lib}`, ...shellOptions });
+    await this.fixReqsFile(path.join(shellOptions.cwd, 'requirements/base.txt'));
+    await this.fixReqsFile(path.join(shellOptions.cwd, 'requirements/development.txt'));
 
     // Diffing
     let rawDiff = await runShellCommand({ command: 'git diff --color=never --unified=0', ...shellOptions });
