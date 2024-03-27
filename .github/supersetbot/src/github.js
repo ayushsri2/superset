@@ -367,6 +367,7 @@ class Github {
     } else {
       await runShellCommand({ command: `git checkout master`, ...shellOptions });
       await runShellCommand({ command: `git reset --hard`, ...shellOptions });
+      await runShellCommand({ command: `git clean -f`, ...shellOptions });
     }
 
     // Run pip-compile-multi
