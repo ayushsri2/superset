@@ -53,9 +53,9 @@ export function runShellCommand({
     };
 
     if(cwd) {
-      console.log(`RUN in ${cwd}: ${command}`);
+      console.log(`RUN \`${command}\` in "${cwd}"`);
     } else {
-      console.log(`RUN: ${command}`);
+      console.log(`RUN: \`${command}\``);
     }
 
     if (dryRun) {

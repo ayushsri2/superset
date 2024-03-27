@@ -7,6 +7,9 @@ on:
       package:
         required: false
         description: The python package to bump (all if empty)
+      group:
+        required: false
+        description: The optional dependency group to bump (as defined in pyproject.toml)
       limit:
         required: true
         description: Max number of PRs to open (0 for no limit)
@@ -36,18 +39,22 @@ jobs:
       - name: Setup supersetbot
         uses: ./.github/actions/setup-supersetbot/
 
+      ######################
       # DELETE ME
       - name: cp pyproject
         run: cp pyproject.toml /tmp
+      ######################
 
       - name: "Checkout `master` ( ${{ github.sha }} )"
         uses: actions/checkout@v4
         with:
           ref: master
 
+      ######################
       # DELETE ME
       - name: cp pyproject back
         run: cp /tmp/pyproject.toml ./
+      ######################
 
       - name: Install pip-compile-multi
         run: pip install pip-compile-multi
@@ -64,4 +71,14 @@ jobs:
             PACKAGE_OPT="-p ${{ github.event.inputs.package }}"
           fi
 
-          supersetbot bump-python --verbose --use-current-repo $PACKAGE_OPT --limit ${{ github.event.inputs.limit }}
+          GROUP_OPT=""
+          if [ -n "${{ github.event.inputs.group }}" ]; then
+            GROUP_OPT="-g ${{ github.event.inputs.group }}"
+          fi
+
+          supersetbot bump-python \
+            --verbose \
+            --use-current-repo \
+            --limit ${{ github.event.inputs.limit }} \
+            $PACKAGE_OPT \
+            $GROUP_OPT
