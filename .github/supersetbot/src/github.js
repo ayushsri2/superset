@@ -446,6 +446,21 @@ class Github {
             });
             console.log(`Pull request created: ${resp.data.html_url}`);
             return resp.data.html_url;
+
+            // This is stupid, but it's one of the only way to trigger the CI checks
+            console.log('Close/reopen the PR to trigger the CI checks.');
+            const prNumber = createResp.data.number;
+            await this.octokit.pulls.update({
+              ...this.unPackRepo(),
+              pull_number: prNumber,
+              state: 'closed',
+            });
+            await this.octokit.pulls.update({
+              ...this.unPackRepo(),
+              pull_number: prNumber,
+              state: 'open',
+            });
+
           } catch (error) {
             console.error(error);
             throw error; // Rethrow the error if you want the caller to handle it
