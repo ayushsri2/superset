@@ -52,7 +52,7 @@ export function runShellCommand({
       env: { ...process.env },
     };
 
-    if(cwd) {
+    if (cwd) {
       console.log(`RUN \`${command}\` in "${cwd}"`);
     } else {
       console.log(`RUN: \`${command}\``);
@@ -103,8 +103,9 @@ export function runShellCommand({
   });
 }
 
-export function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
+export function shuffleArray(originalArray) {
+  const array = [...originalArray]; // Create a shallow copy of the array
+  for (let i = array.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
