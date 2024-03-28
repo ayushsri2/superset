@@ -39,22 +39,10 @@ jobs:
       - name: Setup supersetbot
         uses: ./.github/actions/setup-supersetbot/
 
-      ######################
-      # DELETE ME
-      - name: cp pyproject
-        run: cp pyproject.toml /tmp
-      ######################
-
       - name: "Checkout `master` ( ${{ github.sha }} )"
         uses: actions/checkout@v4
         with:
           ref: master
-
-      ######################
-      # DELETE ME
-      - name: cp pyproject back
-        run: cp /tmp/pyproject.toml ./
-      ######################
 
       - name: Install pip-compile-multi
         run: pip install pip-compile-multi

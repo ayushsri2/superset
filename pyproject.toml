@@ -169,6 +169,29 @@ vertica = ["sqlalchemy-vertica-python>=0.5.9, < 0.6"]
 netezza = ["nzalchemy>=11.0.2"]
 starrocks = ["starrocks>=1.0.0"]
 doris = ["pydoris>=1.0.0, <2.0.0"]
+development = [
+    "docker",
+    "flask-testing",
+    "freezegun",
+    "greenlet>=2.0.2",
+    "grpcio>=1.55.3",
+    "ipython",
+    "openapi-spec-validator",
+    "parameterized",
+    "pip-compile-multi",
+    "pre-commit",
+    "progress>=1.5,<2",
+    "pyfakefs",
+    "pyinstrument>=4.0.2,<5",
+    "pylint",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "python-ldap>=3.4.3",
+    "sqloxide",
+    "statsd",
+    "tox",
+]
 
 [project.urls]
 homepage = "https://superset.apache.org/"
